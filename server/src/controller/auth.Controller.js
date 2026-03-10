@@ -1,6 +1,7 @@
 import { register } from "../models/auth.Model.js";
 import { findUserByEmail, findUserByNationalId } from "../models/user.Model.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const registerController = async (req, res) => {
   const {
@@ -56,3 +57,28 @@ export const registerController = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const loginController = async (req, res) => {
+  // login logic here
+  const { email, password } = req.body;
+  try {
+    if(!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+    const isExist = await findUserByEmail(email);
+    if(!isExist) {
+      return res.status(400).json({ message: "Dont have an account , please register" });
+    }
+    const isMatch = await bcrypt.compare(password, isExist.hashed_password);
+    if(!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+    // generate token logic here
+    const token = jwt.sign({ id: isExist._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    res.status(200).json({ message: "Login successful", user: isExist, token: token });
+  }
+
+  catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

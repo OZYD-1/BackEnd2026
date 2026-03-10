@@ -10,8 +10,8 @@ const app = express()
 app.use(express.json())
 const port = process.env.PORT || 3000
 //http://localhost:3000/api
-// connecTDB()
-connectMongo()
+connecTDB()
+// connectMongo()
 
 app.use("/api", userRoutes)
 app.use("/api", authRoutes)
