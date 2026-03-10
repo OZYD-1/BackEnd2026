@@ -16,3 +16,12 @@ export const UpdatUserById = async (userId, phone_number, address, birth_date, g
 export const deletUserById = async (userId) => {
     const result = await pool.query(`delete form users where userid = $1`, [userId])
 }
+
+export const findUserByEmail = async (email) => {
+    const result = await pool.query(`select * from users where email = $1`, [email])
+    return result.rows[0]
+}
+export const findUserByNationalId = async (national_id) => {
+    const result = await pool.query(`select * from users where national_id = $1`, [national_id])
+    return result.rows[0]
+}
