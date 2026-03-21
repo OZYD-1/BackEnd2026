@@ -4,6 +4,7 @@ import express from "express";
 import userRoutes from "./src/routes/user.Routes.js"
 import authRoutes from "./src/routes/auth.Routes.js"
 import { connectMongo } from "./src/config/db_Mongo.js";
+import categoriesRoutes from "./src/routes/categories.Routes.js";
 dotenv.config()
 
 const app = express()
@@ -15,6 +16,7 @@ connecTDB()
 
 app.use("/api", userRoutes)
 app.use("/api", authRoutes)
+app.use("/api", categoriesRoutes)
 
 app.get("/", (req, res) => {
     res.send("hello world")
